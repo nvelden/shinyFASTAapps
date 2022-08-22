@@ -10,6 +10,7 @@
 library(shiny)
 library(bslib)
 library(shinyWidgets)
+library(shinyjs)
 library(shinyBS)
 library(DT)
 source('R/custom_inputs.R')
@@ -28,22 +29,32 @@ ui <- shiny::fluidPage(
   style = 'padding: 0;',
   lang = "en",
   includeCSS('www/fileDownload.css'),
+  useShinyjs(),
   #return id when delete button is clicked
-  tags$head(tags$script(HTML("$(document).on('click', '.deletebutton', function () {
+  tags$head(tags$script(
+    HTML(
+      "$(document).on('click', '.deletebutton', function () {
                                 Shiny.onInputChange('del_clicked',this.id);
-                             });"))),
-             fileInputArea(
-               "upload",
-               label = "Drag files here",
-               buttonLabel = "max upload size 1 MB",
-               icon = "upload.svg",
-               multiple = TRUE,
-               accept = c(".fasta", ".FASTA")
-            ),
-            DT::dataTableOutput("uploadedfiles", width = "50%"),
-            downloadBttn("merge", "Merge", color="primary", style="simple"),
-          )
-fileInput
+                             });"
+    )
+  )),
+  fileInputArea(
+    "upload",
+    label = "Drag files here",
+    buttonLabel = "max upload size 1 MB",
+    icon = "upload.svg",
+    multiple = TRUE,
+    accept = c(".fasta", ".FASTA")
+  ),
+  checkboxInput("duplicates", "Remove duplicate sequences", value=TRUE),
+  DT::dataTableOutput("uploadedfiles", width = "50%"),
+  downloadButton("merge", "Merge", 
+                 class="btn-primary", 
+                 style="color:#fff", 
+                 icon = shiny::icon("download")
+                 ),
+)
+
 server <- function(input, output, session) {
   
     #Reactive dataframe to store values    
@@ -72,6 +83,7 @@ server <- function(input, output, session) {
           upload$id <- id
           #Store upload data in DF
           r$upload <- rbind(r$upload, upload)
+          shinyjs::enable("merge")
         } else if (!file_exts[i] %in% c('FASTA', 'fasta')){
            showModal(modalDialog(
              size = "s",
@@ -92,6 +104,10 @@ server <- function(input, output, session) {
   observeEvent(input$del_clicked, priority = 20, {
     r$upload <- r$upload[!(r$upload$id == input$del_clicked),]
     r$filesize <- sum(r$upload[["size"]])
+    print(r$upload)
+    if(nrow(r$upload) == 0){
+      shinyjs::disable("merge")
+    }
     })
     
   observeEvent(input$combine, priority = 20, {
@@ -119,12 +135,14 @@ server <- function(input, output, session) {
     ))
   })
   
+  #Merge button
+  shinyjs::disable("merge")
   output$merge <- downloadData <- downloadHandler(
     filename = function() {
       paste(Sys.Date(), "_merged_FASTA", ".fasta", sep="")
     },
     content = function(file) {
-      df <- fastas2df(r$upload[["datapath"]])
+      df <- fastas2df(r$upload[["datapath"]], input$duplicates)
       df2fasta(df, file)
     }
   )

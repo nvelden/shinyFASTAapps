@@ -14,11 +14,15 @@ fasta2df <- function(filename){
   return(df_fasta)
 }
 #Load multiple FASTA files to df
-fastas2df <- function(filenames){
+fastas2df <- function(filenames, remove_duplicates = TRUE){
   bs_fasta_list <- list()
   for(nr in 1:length(filenames)){
     bs_fasta_list[[nr]] <- fasta2df(filenames[nr])
   }
-  df <- dplyr::bind_rows(bs_fasta_list)
+  if(remove_duplicates){
+    df <- dplyr::distinct(dplyr::bind_rows(bs_fasta_list))  
+  } else {
+    df <- dplyr::bind_rows(bs_fasta_list)
+  }
   return(df)
 }

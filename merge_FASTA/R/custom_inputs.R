@@ -42,15 +42,15 @@ fileInputArea <- function(inputId, label, multiple = FALSE, accept = NULL, icon 
           class = "btn btn-area w-100", inputTag,
           div(tags$image(src = icon, width = "80px;"), style = "margin-top: 2rem;"),
           div(p(label), style = "font-size: 1.2rem; font-weight: 700; padding-top: 2rem;"),
-          div(p(buttonLabel), style = "font-size: 1rem; font-weight: 400; margin-bottom: 2rem;")
+          div(p(buttonLabel), style = "font-size: 1rem; font-weight: 400; margin-bottom: 2rem;"),
+          div(
+             id = paste(inputId, "_progress", sep = ""),
+             class = "progress active shiny-file-input-progress",
+             tags$div(class = "progress-bar")
+          )
         )
       )
     ),
-    tags$div(
-      id = paste(inputId, "_progress", sep = ""),
-      class = "progress active shiny-file-input-progress",
-      tags$div(class = "progress-bar")
-    )
   )
 }
 
