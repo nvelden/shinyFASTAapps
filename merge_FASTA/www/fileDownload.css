@@ -1,0 +1,22 @@
+.btn-area {
+  color: #495057;
+  border-color: #C4CDD4;
+  border-width: 0.5px;
+  border-radius: 16px;
+  background-color: transparent;
+}
+.input-group-btn {
+  background: #FFF;
+  border-radius: 16px;
+}
+
+.btn-area:hover {
+  color: #6c757d;
+}
+.progress {
+  height: 32px;
+}
+.progress .progress-bar {
+  font-size: 16px;
+  line-height: 28px;
+}
