@@ -27,7 +27,7 @@ max_size <- 10*1024^2
 filesize <- "10 MB"
 
 ui <- shiny::fluidPage(
-  title = "Merge FASTA files",
+  title = "Convert FASTA to CSV",
   theme = my_theme,
   style = 'padding: 0;',
   lang = "en",
@@ -43,15 +43,20 @@ ui <- shiny::fluidPage(
   )),
   fileInputArea(
     "upload",
-    label = "Drag files here",
+    label = "Drag FASTA file here",
     buttonLabel = sprintf("max upload size %s", filesize),
     icon = "upload.svg",
-    multiple = TRUE,
+    multiple = FALSE,
     accept = c(".fasta", ".FASTA", ".txt")
   ),
-  checkboxInput("duplicates", "Remove duplicate entries", value=TRUE),
   DT::dataTableOutput("uploadedfiles", width = "50%"),
-  downloadButton("merge", "Merge", 
+  radioButtons("sep", "Separator",
+               choices = c(Comma = ",",
+                           Semicolon = ";",
+                           Tab = "\t"),
+               selected = ","),
+  checkboxInput("header", "Header", value=TRUE),
+  downloadButton("download", "Download .csv", 
                  class="btn-primary", 
                  style="color:#fff", 
                  icon = shiny::icon("download")
@@ -69,12 +74,11 @@ server <- function(input, output, session) {
     
     #Store data in reactive DF
     observeEvent(input$upload, priority = 20, {
-      
       file_paths <- input$upload[["datapath"]]
       file_exts <- tolower(tools::file_ext(file_paths))
       file_names <- input$upload[["name"]]
       file_sizes <- input$upload[["size"]]
-
+      
       for (i in 1:length(file_exts)) {
         #Update max file size
         r$filesize <- r$filesize + file_sizes[i]
@@ -88,8 +92,8 @@ server <- function(input, output, session) {
           upload$del <- del_button(id, "deletebutton")
           upload$id <- id
           #Store upload data in DF
-          r$upload <- rbind(r$upload, upload)
-          shinyjs::enable("merge")
+          r$upload <- upload
+          shinyjs::enable("download")
         } else if (!file_exts[i] %in% c('FASTA', 'fasta', 'txt')){
           errorModal(message = sprintf("Invalid file format: %s", file_names[i]))
         } else if (r$filesize >= max_size){
@@ -105,7 +109,7 @@ server <- function(input, output, session) {
     r$upload <- r$upload[!(r$upload$id == input$del_clicked),]
     r$filesize <- sum(r$upload[["size"]])
     if(nrow(r$upload) == 0){
-      shinyjs::disable("merge")
+      shinyjs::disable("download")
     }
     })
     
@@ -132,14 +136,14 @@ server <- function(input, output, session) {
   })
   
   #Merge button
-  shinyjs::disable("merge")
-  output$merge <- downloadData <- downloadHandler(
+  shinyjs::disable("download")
+  output$download <- downloadData <- downloadHandler(
     filename = function() {
-      paste(Sys.Date(), "_merged_FASTA", ".fasta", sep="")
+      paste(input$upload[["name"]], ".csv", sep="")
     },
     content = function(file) {
-      df <- fastas2df(r$upload[["datapath"]], input$duplicates)
-      df2fasta(df, file)
+      df <- fastas2df(input$upload[["datapath"]])
+      write.table(df, file, sep=input$sep, col.names = input$header)
     }
   )
 }

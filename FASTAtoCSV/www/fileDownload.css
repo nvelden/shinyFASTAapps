@@ -23,3 +23,9 @@
 .checkbox input:checked{
 background-color: transparent !important;
 }
+.radio input:checked{
+background-color: transparent !important;
+}
+.control-label{
+  font-weight: bold !important;
+}
