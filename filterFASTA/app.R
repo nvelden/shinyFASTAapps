@@ -15,6 +15,7 @@ library(shinyjs)
 library(shinyBS)
 library(dplyr)
 library(DT)
+library(stringr)
 source('R/custom_inputs.R')
 source('R/fun_fasta2df.R')
 source('R/fun_df2fasta.R')
@@ -41,31 +42,37 @@ ui <- shiny::fluidPage(
       "$(document).on('click', '.deletebutton', function () {
                                 Shiny.onInputChange('del_clicked',this.id);
                              });"
-    )
+    ),
+  #Bind Enter key to search input  
+  keyBinding("search_filter", "search", "Enter"),
   )),
-  sidebarLayout(
-    sidebarPanel(
+  verticalLayout(
+    fluidRow(id="input-container", style="background-color: #FFF; padding: 15px;",
+             column(width=12, style="padding: 15px; border-radius: 20px;",
     fileInput("upload", 
               "Upload FASTA file",
               multiple = FALSE,
-              accept = c(".fasta", ".FASTA", ".txt")
+              accept = c(".fasta", ".FASTA", ".txt"),
+              width = "100%"
               ),
-    hr(),
-    textInputIcon("search_filter1", label=NULL, icon=icon("search")),
-    div(style="display: flex; margin-top: -15px; padding-bottom: 15px;",
+    div(style="display: flex; align-items: flex-start; justify-content:center;",
+        div(
+    textInputIcon("search_filter", label=NULL, width="100%", icon=icon("magnifying-glass")),
+    div(style="margin-top: -20px;",
     helpText(actionLink("optAdvanced", "Advanced"), "|",
              actionLink("optList", "List"), "|",
-             actionLink("optRange", "Range"), "|"
-             )
-    ),
-    #numericRangeInput("seqWidth", "Width", c(NA, NA)),
-    uiOutput("uifilters"),
-    DT::dataTableOutput("uploadedfiles", width = "100%"),
-    actionButton("filter", "Search", class="btn-primary", style="color:#fff")
-  ),
-  mainPanel(
-    DT::dataTableOutput("fastaTable", width = "100%"),
+             actionLink("optRange", "Range")))),
+    actionButton("search", "Search", class="btn-primary", style="color:#fff"),
+    )
+
   )
+  ),
+  fluidRow(id="table-container", style="background-color: #FFF; padding: 15px;",
+           column(width=12, style="padding: 15px; border-radius: 20px;",
+    DT::dataTableOutput("fastaTable", width = "100%"),
+    div(class="alert-box alert alert-success", role="alert", style="display: none;",
+        "Sequence copied to clipboard")
+           ))
 )
 )
 server <- function(input, output, session) {
@@ -89,10 +96,22 @@ server <- function(input, output, session) {
             && (substr(readLines(file_path, n=1),1,1) == ">")) {
           #Attach delete button to upload data
           #Store upload data in DF
-          r$fasta <- fasta2df(file_path)
+          r$fasta <- fasta2df(file_path) %>% 
+            mutate(
+              sub_seq =
+                sprintf(
+                '<div 
+                  style=\"display: flex; justify-content: space-between;\"
+                  <p>%s...</p>
+                  %s
+                </div>', 
+                substr(seq, 1, 20),
+                clipboard_button("clipboard", seq)
+                )
+              )
           shinyjs::enable("filter")
         } else if (!file_ext %in% c('FASTA', 'fasta', 'txt')){
-          errorModal(message = sprintf("Invalid file format: %s", file_names[i]))
+          errorModal(message = sprintf("Invalid file format: %s", file_name))
         } else if (file_size >= max_size){
           errorModal(message = sprintf("Error uploading file. Max filesize: %s", filesize))
         } else if((substr(readLines(file_path, n=1),1,1) != ">")){
@@ -103,17 +122,31 @@ server <- function(input, output, session) {
   
   shinyjs::disable("Search")
   
+  observeEvent(input$search, priority = 20,{
+    search_filter <- isolate(input$search_filter)
+    r$fasta_filtered <- r$fasta
+    if(search_filter != ""){
+      r$fasta_filtered <- search_across(r$fasta, search_filter)
+    }
+  })
+  
   output$fastaTable <- DT::renderDataTable({
-    req(input$filter)
-    req(r$fasta)
+    req(input$search)
+    req(r$fasta_filtered)
     datatable(
-      r$fasta,
+      r$fasta_filtered %>% rename("Sequence" = "sub_seq", "Name" = "names") %>% select(-seq, -width),
       rownames = FALSE,
       escape = FALSE,
       selection = "none",
       options = list(
         #dom = 't',
+        searching = FALSE,
         autoWidth = TRUE,
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'color': '#FFF', 'background': '#3395ff'});",
+          "}"
+        )
       ))
   })
   # #Merge button

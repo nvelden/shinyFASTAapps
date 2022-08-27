@@ -29,3 +29,9 @@ background-color: transparent !important;
 .control-label{
   font-weight: bold !important;
 }
+
+.alert-box{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}

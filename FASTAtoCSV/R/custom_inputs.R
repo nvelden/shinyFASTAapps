@@ -86,3 +86,24 @@ del_button <- function(id, class, icon="trash-can"){
   )
 }
 
+clipboard_button <- function(id, text){
+  sprintf('<button id=\"%s\" 
+                   type=\"button\" 
+                   file=%s
+                   class=\"clipboard btn btn-link btn-sm\"
+                   onclick=\"tableFunction(this)\">
+                   <i class=\"fa fa-copy fa-2x\"></i></button>
+           <script>
+                   function tableFunction(click) {
+                   var file = $(click).attr("file");
+                   var $temp = $("<input>");
+                   $("body").append($temp);
+                   $temp.val(file).select();
+                   document.execCommand("copy");
+                   $temp.remove(); 
+                   $(".alert-box").removeClass("in").show();
+	                 $(".alert-box").delay(200).addClass("in").fadeOut(1000);
+                   }
+           </script>', id, text)
+  
+}
