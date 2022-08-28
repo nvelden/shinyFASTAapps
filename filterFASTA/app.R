@@ -20,6 +20,7 @@ source('R/custom_inputs.R')
 source('R/fun_fasta2df.R')
 source('R/fun_df2fasta.R')
 source('R/fun_modals.R')
+source('R/fun_splitIDs.R')
 #shinyWidgets::shinyWidgetsGallery()
 
 # Setup the bslib theme object
@@ -55,7 +56,8 @@ ui <- shiny::fluidPage(
               accept = c(".fasta", ".FASTA", ".txt"),
               width = "100%"
               ),
-    div(style="display: flex; align-items: flex-start; justify-content:center;",
+    shinyjs::hidden(
+    div(id="search-container", style="display: flex; align-items: flex-start; margin-bottom: -25px; margin-top: 50px",
         div(
     textInputIcon("search_filter", label=NULL, width="100%", icon=icon("magnifying-glass")),
     div(style="margin-top: -20px;",
@@ -64,15 +66,31 @@ ui <- shiny::fluidPage(
              actionLink("optRange", "Range")))),
     actionButton("search", "Search", class="btn-primary", style="color:#fff"),
     )
-
   )
+             )
   ),
   fluidRow(id="table-container", style="background-color: #FFF; padding: 15px;",
            column(width=12, style="padding: 15px; border-radius: 20px;",
-    DT::dataTableOutput("fastaTable", width = "100%"),
+                  shinyjs::hidden(
+                    div(id="downloadbtn-container", 
+                        style="display: flex; 
+                        justify-content: flex-end;
+                        column-gap: 10px;
+                        position: relative;
+                        margin-bottom: -30px;
+                        z-index: 999;",
+                  downloadButton("download_csv", "Download .csv", 
+                                 class="btn-primary", 
+                                 style="color:#fff", 
+                                 icon = shiny::icon("download")),
+                  downloadButton("download_fasta", "Download .fasta", 
+                                 class="btn-primary", 
+                                 style="color:#fff", 
+                                 icon = shiny::icon("download"))
+                  )),
+    DT::dataTableOutput("fastaTable", width = "100%"))),
     div(class="alert-box alert alert-success", role="alert", style="display: none;",
         "Sequence copied to clipboard")
-           ))
 )
 )
 server <- function(input, output, session) {
@@ -109,7 +127,9 @@ server <- function(input, output, session) {
                 clipboard_button("clipboard", seq)
                 )
               )
-          shinyjs::enable("filter")
+          shinyjs::show("search-container")
+          shinyjs::show("downloadbtn-container")
+          r$fasta_filtered <- r$fasta
         } else if (!file_ext %in% c('FASTA', 'fasta', 'txt')){
           errorModal(message = sprintf("Invalid file format: %s", file_name))
         } else if (file_size >= max_size){
@@ -120,8 +140,7 @@ server <- function(input, output, session) {
       
     })
   
-  shinyjs::disable("Search")
-  
+  #Filter FASTA on keyword
   observeEvent(input$search, priority = 20,{
     search_filter <- isolate(input$search_filter)
     r$fasta_filtered <- r$fasta
@@ -130,8 +149,35 @@ server <- function(input, output, session) {
     }
   })
   
+  #Filter FASTA list option
+  observeEvent(input$optList, priority = 20, {
+    showModal(listModal())
+    shinyjs::disable("listSearch")
+  })
+  #Enable list search button
+  observe({
+          if(input$id_list != "" && !is.null(input$id_list)){
+            shinyjs::enable("listSearch")
+            r$id_list <- split_IDs(isolate(input$id_list), collapse = FALSE)
+            updateActionButton(session, "listSearch", label = sprintf("Search %s IDs", length(r$id_list)))
+          } else {
+            updateActionButton(session, "listSearch", label = "Search IDs")
+            shinyjs::disable("listSearch")
+            r$id_list <- NULL
+          }
+          })
+  #Search IDs
+  observeEvent(input$listSearch, priority = 20,{
+    id_list <- paste(r$id_list, collapse = "|")
+    r$fasta_filtered <- r$fasta
+    if(id_list != ""){
+      r$fasta_filtered <- r$fasta %>% filter(str_detect(names,id_list))
+      removeModal()
+    }
+  })
+  
+  #Table output
   output$fastaTable <- DT::renderDataTable({
-    req(input$search)
     req(r$fasta_filtered)
     datatable(
       r$fasta_filtered %>% rename("Sequence" = "sub_seq", "Name" = "names") %>% select(-seq, -width),
@@ -144,22 +190,33 @@ server <- function(input, output, session) {
         autoWidth = TRUE,
         initComplete = JS(
           "function(settings, json) {",
-          "$(this.api().table().header()).css({'color': '#FFF', 'background': '#3395ff'});",
+          "$(this.api().table().header()).css({'color': '#FFF', 'background': '#007AFF'});",
           "}"
         )
       ))
   })
-  # #Merge button
-  # shinyjs::disable("download")
-  # output$download <- downloadData <- downloadHandler(
-  #   filename = function() {
-  #     paste(input$upload[["name"]], ".csv", sep="")
-  #   },
-  #   content = function(file) {
-  #     df <- fastas2df(input$upload[["datapath"]])
-  #     write.table(df, file, sep=input$sep, col.names = input$header)
-  #   }
-  # )
+  # Download filtered CSV
+  output$download_csv <- downloadData <- downloadHandler(
+    filename = function() {
+      paste(input$upload[["name"]], "_filtered.csv", sep="")
+    },
+    content = function(file) {
+      write.table(r$fasta_filtered[, c("names", "seq")], file, sep=",", row.names = FALSE)
+    }
+  )
+  # Download filtered FASTA
+  output$download_fasta <- downloadData <- downloadHandler(
+    filename = function() {
+      paste(input$upload[["name"]], "_filtered.fasta", sep="")
+    },
+    content = function(file) {
+      df2fasta(r$fasta_filtered[, c("names", "seq")], file)
+    }
+  )
+  
+  
+  
+
 }
 # Run the application 
 options(shiny.maxRequestSize = max_size)

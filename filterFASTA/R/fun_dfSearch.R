@@ -4,5 +4,4 @@ search_across <- function(df, keyword){
     filter(if_any(c(names, seq), ~str_detect(., fixed(keyword, ignore_case=TRUE))))
   return(filtered_data)
 }
-
                                  

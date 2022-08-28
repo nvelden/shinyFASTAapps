@@ -6,4 +6,3 @@ df2fasta <- function(data, filepath){
   fasta <- Biostrings::writeXStringSet(Xstring, filepath)
   return(fasta)
 }
-
