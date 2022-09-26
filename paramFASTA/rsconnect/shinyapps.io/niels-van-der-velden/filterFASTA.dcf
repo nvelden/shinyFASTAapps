@@ -1,0 +1,14 @@
+name: filterFASTA
+title: filterFASTA
+username:
+account: niels-van-der-velden
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7024977
+bundleId: 6306216
+url: https://niels-van-der-velden.shinyapps.io/filterFASTA/
+when: 1663265163.04924
+lastSyncTime: 1663265163.04925
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|FASTAS/.DS_Store|FASTAS/FASTA1.fasta|FASTAS/human.fasta|www/.DS_Store

@@ -1,0 +1,14 @@
+name: FASTAtoCSV
+title: FASTAtoCSV
+username:
+account: niels-van-der-velden
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7076428
+bundleId: 6324012
+url: https://niels-van-der-velden.shinyapps.io/FASTAtoCSV/
+when: 1663770145.07967
+lastSyncTime: 1663770145.07969
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: mtcars.csv|multifasta.fasta|multifasta2.fasta|R/.DS_Store

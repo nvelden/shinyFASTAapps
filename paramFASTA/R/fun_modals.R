@@ -33,14 +33,14 @@ advSearch_input <- function(nr = 1, opr_opt = c("AND", "OR", "NOT"), del = TRUE)
                   opr_opt, 
                   selected = NULL,
                   multiple = FALSE,
-                  width = "140px"),
+                  width = "90px"),
       selectInput(sprintf("advName-%s", nr), 
                   label = "",
                   multiple = FALSE,
                   choices=c("Name" = "names", "Sequence" = "seq"), 
                   selected = "",
-                  width = "170px"),
-      textInput(sprintf("advText-%s", nr), label = "", placeholder = "Search", width="100%"),
+                  width = "150px"),
+      textInput(sprintf("advText-%s", nr), label = "", placeholder = "Search", width="500px"),
       if(del){
       div(style="align-self: center",
           HTML(del_button(sprintf("remove-%s", nr), class = "advdeletebutton")))

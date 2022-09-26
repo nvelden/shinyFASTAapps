@@ -12,6 +12,8 @@ library(bslib)
 library(shinyWidgets)
 library(shinyjs)
 library(shinyBS)
+library(BiocGenerics)
+options(repos = BiocManager::repositories())
 library(dplyr)
 library(DT)
 source('R/custom_inputs.R')
@@ -32,6 +34,7 @@ ui <- shiny::fluidPage(
   style = 'padding: 0;',
   lang = "en",
   includeCSS('www/fileDownload.css'),
+  tags$script(src="iframeSizer.contentWindow.min.js"),
   useShinyjs(),
   #return id when delete button is clicked
   tags$head(tags$script(
@@ -50,7 +53,7 @@ ui <- shiny::fluidPage(
     accept = c(".fasta", ".FASTA", ".txt")
   ),
   checkboxInput("duplicates", "Remove duplicate entries", value=TRUE),
-  DT::dataTableOutput("uploadedfiles", width = "50%"),
+  div(id="file-container", width="100%", DT::dataTableOutput("uploadedfiles", width = "100%")),
   downloadButton("merge", "Merge", 
                  class="btn-primary", 
                  style="color:#fff", 
@@ -117,11 +120,11 @@ server <- function(input, output, session) {
     r$upload[,c("name","size","del")] %>% mutate(size = paste(round(size/1000, 0), "KB")),
     rownames = FALSE,
     escape = FALSE,
+    width="100%",
     selection = "none",
     options = list(
       dom = 't',
       ordering = FALSE,
-      autoWidth = TRUE,
       orderable = FALSE,
       initComplete = JS(
         "function(settings, json) {",

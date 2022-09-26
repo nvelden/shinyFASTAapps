@@ -1,0 +1,14 @@
+name: merge_FASTA
+title: merge_FASTA
+username:
+account: niels-van-der-velden
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7065959
+bundleId: 6321553
+url: https://niels-van-der-velden.shinyapps.io/merge_FASTA/
+when: 1663709645.14365
+lastSyncTime: 1663709645.14366
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: mtcars.csv|multifasta.fasta|multifasta2.fasta|R/.DS_Store

@@ -2,6 +2,7 @@ library(shiny)
 library(bslib)
 library(shinyWidgets)
 library(shinyjs)
+options(repos = BiocManager::repositories())
 library(shinyBS)
 library(dplyr)
 library(DT)
@@ -23,6 +24,7 @@ ui <- shiny::fluidPage(
   style = 'padding: 0;',
   lang = "en",
   includeCSS('www/fileDownload.css'),
+  tags$script(src="iframeSizer.contentWindow.min.js"),
   useShinyjs(),
   #return id when delete button is clicked
   tags$head(tags$script(
@@ -40,7 +42,7 @@ ui <- shiny::fluidPage(
     multiple = FALSE,
     accept = c(".fasta", ".FASTA", ".txt")
   ),
-  DT::dataTableOutput("uploadedfiles", width = "50%"),
+  div(id="file-container", width="100%", DT::dataTableOutput("uploadedfiles", width = "100%")),
   radioButtons("sep", "Separator",
                choices = c(Comma = ",",
                            Semicolon = ";",
@@ -113,10 +115,11 @@ server <- function(input, output, session) {
     rownames = FALSE,
     escape = FALSE,
     selection = "none",
+    width="100%",
     options = list(
       dom = 't',
       ordering = FALSE,
-      autoWidth = TRUE,
+      autoWidth = FALSE,
       orderable = FALSE,
       initComplete = JS(
         "function(settings, json) {",

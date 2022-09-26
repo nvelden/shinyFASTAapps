@@ -1,0 +1,14 @@
+name: paramFASTA
+title: paramFASTA
+username:
+account: niels-van-der-velden
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7092611
+bundleId: 6328610
+url: https://niels-van-der-velden.shinyapps.io/paramFASTA/
+when: 1663871358.97482
+lastSyncTime: 1663871358.97483
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: FASTAS/FASTA1.fasta|FASTAS/human.fasta
