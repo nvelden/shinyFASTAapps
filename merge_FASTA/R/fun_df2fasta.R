@@ -1,8 +1,9 @@
 #Convert df to FASTA
 df2fasta <- function(data, filepath){
-  seq <- data$seq 
-  names(seq) <- data$names
-  Xstring <- Biostrings::BStringSet(unlist(seq))
-  fasta <- Biostrings::writeXStringSet(Xstring, filepath)
-  return(fasta)
+  fasta_lines <- unlist(Map(function(name, seq) {
+    wrapped <- strwrap(seq, width = 60)
+    c(paste0(">", name), wrapped)
+  }, data$names, data$seq), use.names = FALSE)
+  writeLines(fasta_lines, filepath, useBytes = TRUE)
+  invisible(filepath)
 }

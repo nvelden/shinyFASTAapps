@@ -1,0 +1,108 @@
+name: Deploy Shinylive applications
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install Shinylive
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::shinylive
+
+      - name: Export Shinylive apps
+        shell: Rscript {0}
+        run: |
+          apps <- c("merge_FASTA", "FASTAtoCSV", "filterFASTA", "paramFASTA")
+          unlink("docs", recursive = TRUE, force = TRUE)
+          dir.create("docs")
+
+          for (app in apps) {
+            stage <- file.path(".shinylive-export", app)
+            unlink(stage, recursive = TRUE, force = TRUE)
+            dir.create(stage, recursive = TRUE)
+            file.copy(file.path(app, "app.R"), stage)
+            file.copy(file.path(app, "R"), stage, recursive = TRUE)
+            if (dir.exists(file.path(app, "www"))) {
+              file.copy(file.path(app, "www"), stage, recursive = TRUE)
+            }
+            shinylive::export(stage, file.path("docs", app))
+          }
+
+      - name: Add app index
+        run: |
+          cat > docs/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Shiny FASTA Apps</title>
+            <style>
+              body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #eef7ff; color: #0f172a; }
+              main { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+              h1 { margin: 0 0 8px; font-size: 32px; }
+              p { color: #334155; line-height: 1.5; }
+              ul { display: grid; gap: 12px; padding: 0; list-style: none; }
+              a { display: block; padding: 16px 18px; border: 1px solid #c4cdd4; border-radius: 12px; background: #fff; color: #0067d6; font-weight: 700; text-decoration: none; }
+              a:hover, a:focus { border-color: #007aff; box-shadow: 0 8px 22px rgba(0, 122, 255, 0.12); }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Shiny FASTA Apps</h1>
+              <p>Each app runs in the browser with Shinylive. First visits can take up to 1-2 minutes while runtime assets load and cache.</p>
+              <ul>
+                <li><a href="./merge_FASTA/">Merge FASTA</a></li>
+                <li><a href="./FASTAtoCSV/">FASTA to CSV</a></li>
+                <li><a href="./filterFASTA/">Filter FASTA</a></li>
+                <li><a href="./paramFASTA/">FASTA Parameters</a></li>
+              </ul>
+            </main>
+          </body>
+          </html>
+          HTML
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

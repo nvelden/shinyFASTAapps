@@ -2,8 +2,6 @@ library(shiny)
 library(bslib)
 library(shinyWidgets)
 library(shinyjs)
-options(repos = BiocManager::repositories())
-library(shinyBS)
 library(dplyr)
 library(DT)
 source('R/custom_inputs.R')
@@ -12,7 +10,7 @@ source('R/fun_df2fasta.R')
 source('R/fun_modals.R')
 
 # Setup the bslib theme object
-my_theme <- bs_theme(base_font = bslib::font_google("Inter"), bg="#EEF7FF", fg="#000", primary="#007AFF")
+my_theme <- bs_theme(base_font = "Inter", bg="#EEF7FF", fg="#000", primary="#007AFF")
 
 #Max file upload in bytes
 max_size <- 10*1024^2

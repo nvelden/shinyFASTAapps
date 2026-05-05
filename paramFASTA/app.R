@@ -1,14 +1,9 @@
 library(shiny)
 library(shinydashboard)
-library(BiocManager)
 library(Peptides)
-#options(repos = BiocManager::repositories())
-#options("repos")
-#BiocManager::install("BiocGenerics")
 library(bslib)
 library(shinyWidgets)
 library(shinyjs)
-library(shinyBS)
 library(dplyr)
 library(tidyr)
 library(DT)
@@ -23,7 +18,7 @@ source('R/fun_searchQuery.R')
 #shinyWidgets::shinyWidgetsGallery()
 
 # Setup the bslib theme object
-my_theme <- bs_theme(base_font = bslib::font_google("Inter"), bg="#EEF7FF", fg="#000", primary="#007AFF")
+my_theme <- bs_theme(base_font = "Inter", bg="#EEF7FF", fg="#000", primary="#007AFF")
 
 #Max file upload in bytes
 max_size <- 10*1024^2

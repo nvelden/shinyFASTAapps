@@ -22,7 +22,7 @@ if("Extinction" %in% params){
   fastaDF <- fastaDF %>% mutate(Extinction = round(Extinction(seq), 3))
 }
 if("Absorbance" %in% params){
-  fastaDF <- fastaDF %>% mutate(Absorbance = round((Extinction(fastaDF$seq) / mw(fastaDF$seq)),3))
+  fastaDF <- fastaDF %>% mutate(Absorbance = round((Extinction(fastaDF$seq) / Peptides::mw(fastaDF$seq)),3))
 }
 if("Length" %in% params){
   fastaDF <- fastaDF %>% mutate(Length = Peptides::lengthpep(seq = fastaDF$seq))
