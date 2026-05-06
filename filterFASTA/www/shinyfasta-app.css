@@ -23,6 +23,95 @@ body {
   margin-bottom: 16px;
 }
 
+.filter-toolbar {
+  margin: 42px 0 18px;
+}
+
+.filter-search-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: min(100%, 520px);
+}
+
+.filter-search-field {
+  flex: 1 1 auto;
+  min-width: 220px;
+}
+
+.filter-search-field .form-group {
+  margin-bottom: 0;
+}
+
+.filter-search-field .input-group {
+  height: 46px;
+}
+
+.filter-search-field .input-group-addon,
+.filter-search-field .input-group-text,
+.filter-search-field .form-control {
+  height: 46px;
+  border-color: rgba(15, 23, 42, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  color: #07111f;
+}
+
+.filter-search-field .input-group-addon,
+.filter-search-field .input-group-text {
+  width: 42px;
+  justify-content: center;
+  border-radius: 10px 0 0 10px;
+}
+
+.filter-search-field .form-control {
+  border-radius: 0 10px 10px 0;
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.filter-search-field .form-control:focus {
+  border-color: #0099f9;
+  box-shadow: 0 0 0 3px rgba(0, 153, 249, 0.14);
+}
+
+.filter-options {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.filter-option {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #075a9f !important;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none !important;
+}
+
+.filter-option:hover,
+.filter-option:focus {
+  background: #e4f4ff;
+  color: #074b85 !important;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
 .btn,
 .btn-primary,
 .action-button,
@@ -33,7 +122,7 @@ body {
   justify-content: center;
   gap: 6px;
   padding: 10px 18px !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   border: 1px solid #0099f9 !important;
   background: #0099f9 !important;
   color: #fff !important;
@@ -42,7 +131,16 @@ body {
   font-weight: 600 !important;
   line-height: 1.2 !important;
   text-decoration: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 8px 18px rgba(0, 122, 255, 0.16) !important;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.search-button {
+  min-width: 84px;
+}
+
+.download-button {
+  min-width: 156px;
 }
 
 .btn:hover,
@@ -56,6 +154,8 @@ body {
   border-color: #0868d8 !important;
   background: #0868d8 !important;
   color: #fff !important;
+  box-shadow: 0 10px 22px rgba(0, 97, 215, 0.2) !important;
+  transform: translateY(-1px);
 }
 
 .btn-area {
@@ -75,6 +175,35 @@ body {
 .input-group-btn {
   border-radius: 16px !important;
   background: transparent !important;
+}
+
+.sequence-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.sequence-text {
+  min-width: 0;
+  overflow: hidden;
+  color: #1b2938;
+  font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.clipboard.btn {
+  width: 44px;
+  min-width: 44px;
+  min-height: 40px;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.clipboard.btn .fa {
+  font-size: 18px;
 }
 
 .progress {
@@ -105,6 +234,8 @@ table.dataTable {
 
 table.dataTable {
   border-collapse: collapse !important;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 table.dataTable thead th {
@@ -122,6 +253,31 @@ table.dataTable tbody td {
   .container-fluid {
     padding-right: 18px !important;
     padding-left: 18px !important;
+  }
+
+  .filter-search-row,
+  .table-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-search-field {
+    min-width: 0;
+  }
+
+  .filter-options {
+    display: flex;
+    width: 100%;
+  }
+
+  .filter-option {
+    flex: 1 1 0;
+  }
+
+  .search-button,
+  .download-button {
+    width: 100%;
   }
 
   .btn-area {

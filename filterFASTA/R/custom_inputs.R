@@ -87,24 +87,25 @@ del_button <- function(id, class, icon="trash-can"){
 }
 
 clipboard_button <- function(id, text){
+  value <- htmltools::htmlEscape(text, attribute = TRUE)
   sprintf('<button id=\"%s\" 
                    type=\"button\" 
-                   file=%s
+                   data-sequence=\"%s\"
                    class=\"clipboard btn btn-link btn-sm\"
                    onclick=\"tableFunction(this)\">
-                   <i class=\"fa fa-copy fa-2x\"></i></button>
+                   <i class=\"fa fa-copy\"></i></button>
            <script>
                    function tableFunction(click) {
-                   var file = $(click).attr("file");
+                   var file = $(click).attr("data-sequence");
                    var $temp = $("<input>");
                    $("body").append($temp);
                    $temp.val(file).select();
                    document.execCommand("copy");
                    $temp.remove(); 
                    $(".alert-box").removeClass("in").show();
-	                 $(".alert-box").delay(200).addClass("in").fadeOut(1200);
+                   $(".alert-box").delay(200).addClass("in").fadeOut(1200);
                    }
-           </script>', id, text)
+           </script>', id, value)
   
 }
 

@@ -60,14 +60,18 @@ ui <- shiny::fluidPage(
               width = "100%"
               ),
     shinyjs::hidden(
-    div(id="search-container", style="display: flex; align-items: flex-start; margin-bottom: -25px; margin-top: 50px;",
-        div(
-    textInputIcon("search_filter", label=NULL, width="100%", icon=icon("magnifying-glass")),
-    div(style="margin-top: -15px;",
-    helpText(actionLink("optAdvanced", "Advanced"), "|",
-             actionLink("optList", "List"), "|",
-             actionLink("optRange", "Range")))),
-    actionButton("search", "Search", class="btn-primary", style="color:#fff"),
+    div(id="search-container", class="filter-toolbar",
+        div(class="filter-search-row",
+            div(class="filter-search-field",
+                textInputIcon("search_filter", label=NULL, width="100%", icon=icon("magnifying-glass"))
+            ),
+            actionButton("search", "Search", class="btn-primary search-button", style="color:#fff")
+        ),
+        div(class="filter-options",
+            actionLink("optAdvanced", "Advanced", class="filter-option"),
+            actionLink("optList", "List", class="filter-option"),
+            actionLink("optRange", "Range", class="filter-option")
+        )
     )
   )
              )
@@ -75,19 +79,13 @@ ui <- shiny::fluidPage(
   fluidRow(id="table-container", style="padding: 15px; min-height:400px;",
            column(width=12, style="padding: 15px; border-radius: 20px;",
                   shinyjs::hidden(
-                    div(id="downloadbtn-container", 
-                        style="display: flex; 
-                        justify-content: flex-end;
-                        column-gap: 10px;
-                        position: relative;
-                        margin-bottom: -30px;
-                        z-index: 999;",
+                    div(id="downloadbtn-container", class="table-actions",
                   downloadButton("download_csv", "Download .csv", 
-                                 class="btn-primary", 
+                                 class="btn-primary download-button", 
                                  style="color:#fff", 
                                  icon = shiny::icon("download")),
                   downloadButton("download_fasta", "Download .fasta", 
-                                 class="btn-primary", 
+                                 class="btn-primary download-button", 
                                  style="color:#fff", 
                                  icon = shiny::icon("download"))
                   )),
@@ -126,9 +124,8 @@ server <- function(input, output, session) {
             mutate(
               sub_seq =
                 sprintf(
-                '<div 
-                  style=\"display: flex; justify-content: space-between;\"
-                  <p>%s...</p>
+                '<div class=\"sequence-preview\">
+                  <span class=\"sequence-text\">%s...</span>
                   %s
                 </div>', 
                 substr(seq, 1, 20),
