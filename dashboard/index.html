@@ -28,7 +28,6 @@
     body {
       min-height: 100dvh;
       margin: 0;
-      padding-bottom: 112px;
       overflow-x: hidden;
       display: grid;
       grid-template-rows: auto auto 1fr auto;
@@ -116,7 +115,7 @@
       width: 100%;
       max-width: 1040px;
       margin: -32px auto 0;
-      padding: 0 24px 42px;
+      padding: 32px 24px 42px;
       position: relative;
       z-index: 1;
       background: var(--bg);
@@ -205,23 +204,18 @@
 
     /* ===== Footer ===== */
     footer {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 10;
-      padding: 28px 24px 22px;
+      padding: 16px 24px 12px;
       background: #fff;
       border-top: 1px solid var(--line);
       color: var(--muted);
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
     }
     .social {
       display: flex;
       justify-content: center;
-      gap: 18px;
-      margin-bottom: 12px;
+      gap: 16px;
+      margin-bottom: 8px;
     }
     .social a {
       width: 28px;
@@ -238,17 +232,10 @@
     @media (max-width: 720px) {
       .grid { grid-template-columns: 1fr; }
       .hero-inner, .content {
-        width: 100%;
-        max-width: 390px;
-        margin-right: 0;
-        margin-left: 0;
         padding-left: 18px;
         padding-right: 18px;
       }
       .nav-inner {
-        max-width: 390px;
-        margin-right: 0;
-        margin-left: 0;
         padding: 14px 18px;
       }
       .nav-links a[href*="issues"] { display: none; }
