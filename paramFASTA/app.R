@@ -29,6 +29,7 @@ ui <- shiny::fluidPage(
   theme = my_theme,
   style = 'padding: 0;',
   lang = "en",
+  includeCSS('www/shinyfasta-app.css'),
   useShinyjs(),
   #return id when delete button is clicked
   #Set inputs to NULL

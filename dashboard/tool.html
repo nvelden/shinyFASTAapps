@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shinyFASTA</title>
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"%3E%3Crect width="32" height="32" rx="7" fill="%23eef7ff"/%3E%3Cpath d="M5 4l10 12L5 28h7l10-12L12 4H5z" fill="%230099f9"/%3E%3Cpath d="M17 4l10 12-10 12h7l8-10.2v-3.6L24 4h-7z" fill="%230868d8"/%3E%3C/svg%3E'>
   <style>
     :root {
       --bg: #eef7ff;
@@ -17,16 +18,22 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { background: var(--bg); margin: 0; }
+    html,
+    body {
+      min-height: 100%;
+      background: #fff;
+      margin: 0;
+    }
 
     body {
-      min-height: 100vh;
+      min-height: 100dvh;
+      padding-bottom: 52px;
       color: var(--ink);
       font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
       font-size: 16px;
       line-height: 1.5;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -68,34 +75,6 @@
     .crumbs .sep { opacity: 0.5; }
     .crumbs .current { color: var(--ink); font-weight: 600; }
 
-    .nav-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ink);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 140ms ease;
-    }
-    .btn:hover { border-color: var(--blue); color: var(--blue-dark); }
-    .btn.primary {
-      background: var(--blue);
-      color: #fff;
-      border-color: var(--blue);
-    }
-    .btn.primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); color: #fff; }
-    .btn svg { width: 14px; height: 14px; }
-
     .tool-head {
       max-width: 1040px;
       width: 100%;
@@ -105,6 +84,9 @@
       align-items: end;
       justify-content: space-between;
       gap: 16px;
+      background: var(--bg);
+      box-shadow: 0 0 0 100vmax var(--bg);
+      clip-path: inset(0 -100vmax);
     }
     .tool-head h1 {
       margin: 0;
@@ -117,26 +99,6 @@
       color: var(--muted);
       font-size: 15px;
     }
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      background: var(--blue-soft);
-      color: var(--blue-dark);
-      border: 1px solid rgba(0, 153, 249, 0.25);
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .status .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--blue);
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse { 50% { opacity: 0.4; } }
 
     .frame-wrap {
       flex: 1;
@@ -145,13 +107,16 @@
       margin: 0 auto;
       padding: 0 24px 28px;
       display: flex;
+      background: var(--bg);
+      box-shadow: 0 0 0 100vmax var(--bg);
+      clip-path: inset(0 -100vmax);
     }
     .frame-card {
       flex: 1;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(8, 104, 216, 0.08);
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -168,7 +133,7 @@
       height: 100%;
       border: 0;
       display: block;
-      background: #fff;
+      background: var(--bg);
     }
 
     .loading {
@@ -218,6 +183,11 @@
     }
 
     footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
       padding: 16px 24px;
       background: #fff;
       border-top: 1px solid var(--line);
@@ -230,7 +200,6 @@
       .nav-inner { padding: 12px 18px; flex-wrap: wrap; }
       .tool-head { padding: 18px; flex-direction: column; align-items: flex-start; gap: 10px; }
       .frame-wrap { padding: 0 18px 18px; }
-      .nav-actions .btn span { display: none; }
       .crumbs { font-size: 14px; }
     }
   </style>
@@ -251,16 +220,6 @@
         <span class="sep">/</span>
         <span class="current" id="crumb">App</span>
       </nav>
-      <div class="nav-actions">
-        <button class="btn" id="reload" type="button" title="Reload">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8a6 6 0 1 1-1.76-4.24"/><path d="M14 2v4h-4"/></svg>
-          <span>Reload</span>
-        </button>
-        <a class="btn primary" id="open-new" href="#" target="_blank" rel="noopener">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h5v5"/><path d="M14 2L7 9"/><path d="M13 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4"/></svg>
-          <span>Open in new tab</span>
-        </a>
-      </div>
     </div>
   </header>
 
@@ -269,7 +228,6 @@
       <h1 id="title">App</h1>
       <p id="subtitle">Browser-based FASTA tool</p>
     </div>
-    <span class="status"><span class="dot"></span><span id="status-label">Loading runtime...</span></span>
   </div>
 
   <main class="frame-wrap">
@@ -285,7 +243,7 @@
     </div>
   </main>
 
-  <footer>&copy; 2022-2026 Niels van der Velden &middot; powered by Shinylive</footer>
+  <footer>&copy; 2022-2026 Niels van der Velden</footer>
 
   <script>
     const APPS = {
@@ -302,28 +260,19 @@
     document.getElementById("title").textContent = app.title;
     document.getElementById("subtitle").textContent = app.subtitle;
     document.getElementById("crumb").textContent = app.title;
-    document.getElementById("open-new").setAttribute("href", app.path);
     document.title = "shinyFASTA  -  " + app.title;
 
     const iframe = document.getElementById("app-frame");
     const loading = document.getElementById("loading");
-    const statusLabel = document.getElementById("status-label");
 
     function load() {
       loading.classList.remove("hidden");
-      statusLabel.textContent = "Loading runtime...";
       iframe.src = app.path;
     }
     iframe.addEventListener("load", () => {
       loading.classList.add("hidden");
-      statusLabel.textContent = "Online";
     });
     load();
-
-    document.getElementById("reload").addEventListener("click", () => {
-      iframe.src = "about:blank";
-      requestAnimationFrame(load);
-    });
   </script>
 </body>
 </html>

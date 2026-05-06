@@ -1,0 +1,130 @@
+html,
+body,
+.container-fluid {
+  background: #eef7ff;
+  color: #07111f;
+  font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container-fluid {
+  max-width: 1040px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 24px 28px !important;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.btn,
+.btn-primary,
+.action-button,
+.download-button {
+  min-height: 46px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px !important;
+  border-radius: 8px !important;
+  border: 1px solid #0099f9 !important;
+  background: #0099f9 !important;
+  color: #fff !important;
+  font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.btn:hover,
+.btn:focus,
+.btn-primary:hover,
+.btn-primary:focus,
+.action-button:hover,
+.action-button:focus,
+.download-button:hover,
+.download-button:focus {
+  border-color: #0868d8 !important;
+  background: #0868d8 !important;
+  color: #fff !important;
+}
+
+.btn-area {
+  min-height: 300px;
+  border: 1px solid rgba(15, 23, 42, 0.16) !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  color: #334155 !important;
+}
+
+.btn-area:hover,
+.btn-area:focus {
+  border-color: rgba(0, 153, 249, 0.45) !important;
+  color: #07111f !important;
+}
+
+.input-group-btn {
+  border-radius: 16px !important;
+  background: transparent !important;
+}
+
+.progress {
+  height: 28px;
+  border-radius: 8px;
+  background: #e6f3ff;
+}
+
+.progress .progress-bar {
+  background: #0099f9;
+  font-size: 13px;
+  line-height: 28px;
+}
+
+.checkbox,
+.radio,
+.shiny-input-container {
+  color: #07111f;
+  font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.form-control,
+.selectize-input,
+.dataTables_wrapper,
+table.dataTable {
+  font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+}
+
+table.dataTable {
+  border-collapse: collapse !important;
+}
+
+table.dataTable thead th {
+  background: #fff;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #07111f;
+  font-weight: 700;
+}
+
+table.dataTable tbody td {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+@media (max-width: 720px) {
+  .container-fluid {
+    padding-right: 18px !important;
+    padding-left: 18px !important;
+  }
+
+  .btn-area {
+    min-height: 220px;
+  }
+}

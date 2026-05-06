@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>shinyFASTA</title>
-  <meta name="description" content="Browser-based FASTA tools powered by Shinylive.">
+  <meta name="description" content="Browser-based FASTA tools.">
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"%3E%3Crect width="32" height="32" rx="7" fill="%23eef7ff"/%3E%3Cpath d="M5 4l10 12L5 28h7l10-12L12 4H5z" fill="%230099f9"/%3E%3Cpath d="M17 4l10 12-10 12h7l8-10.2v-3.6L24 4h-7z" fill="%230868d8"/%3E%3C/svg%3E'>
   <style>
     :root {
       --bg: #eef7ff;
@@ -18,12 +19,19 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { background: var(--bg); }
+    html,
+    body {
+      min-height: 100%;
+      background: #fff;
+    }
 
     body {
-      min-height: 100vh;
+      min-height: 100dvh;
       margin: 0;
+      padding-bottom: 112px;
       overflow-x: hidden;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
       color: var(--ink);
       font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
       font-size: 16px;
@@ -111,9 +119,12 @@
       padding: 0 24px 42px;
       position: relative;
       z-index: 1;
+      background: var(--bg);
+      box-shadow: 0 0 0 100vmax var(--bg);
+      clip-path: inset(0 -100vmax);
     }
     .notice {
-      max-width: 760px;
+      width: 100%;
       margin: 0 0 28px;
       padding: 14px 18px;
       border: 1px solid rgba(0, 153, 249, 0.22);
@@ -194,7 +205,11 @@
 
     /* ===== Footer ===== */
     footer {
-      margin-top: 32px;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
       padding: 28px 24px 22px;
       background: #fff;
       border-top: 1px solid var(--line);

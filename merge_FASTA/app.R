@@ -31,6 +31,7 @@ ui <- shiny::fluidPage(
   style = 'padding: 0;',
   lang = "en",
   includeCSS('www/fileDownload.css'),
+  includeCSS('www/shinyfasta-app.css'),
   tags$script(src="iframeSizer.contentWindow.min.js"),
   useShinyjs(),
   #return id when delete button is clicked
