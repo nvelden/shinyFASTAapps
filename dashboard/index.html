@@ -12,38 +12,32 @@
       --muted: #6e757b;
       --blue: #0099f9;
       --blue-dark: #0868d8;
+      --blue-soft: #e6f3ff;
       --card: #ffffff;
+      --line: rgba(15, 23, 42, 0.08);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--bg);
-    }
+    * { box-sizing: border-box; }
+    html, body { background: var(--bg); }
 
     body {
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
-      background: var(--bg);
       color: var(--ink);
       font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
       font-size: 16px;
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
+    /* ===== Navbar ===== */
     .navbar {
       background: #fff;
-      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+      border-bottom: 1px solid var(--line);
     }
-
     .nav-inner {
       width: 100%;
       max-width: 1040px;
@@ -54,115 +48,86 @@
       justify-content: space-between;
       gap: 24px;
     }
-
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 24px;
+      gap: 10px;
+      font-size: 22px;
       font-weight: 700;
     }
-
-    .brand-mark {
-      width: 22px;
-      height: 22px;
-      flex: 0 0 auto;
-    }
-
+    .brand-mark { width: 22px; height: 22px; flex: 0 0 auto; }
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 24px;
       color: var(--muted);
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
     }
+    .nav-links a:hover, .nav-links a:focus { color: var(--blue-dark); }
 
-    .nav-links a:hover,
-    .nav-links a:focus {
-      color: #000;
-    }
-
+    /* ===== Hero ===== */
     .hero-art {
-      min-height: 245px;
+      min-height: 260px;
       overflow: hidden;
       background:
         linear-gradient(115deg, rgba(3, 22, 52, 0.98) 0%, rgba(8, 58, 136, 0.95) 42%, rgba(0, 153, 249, 0.92) 100%),
         repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0 2px, transparent 2px 24px);
       position: relative;
-      isolation: isolate;
     }
-
-    .hero-art::before,
-    .hero-art::after {
-      content: "";
-      position: absolute;
-      inset: -30% -10%;
-      background:
-        linear-gradient(120deg, transparent 0 11%, rgba(255, 255, 255, 0.18) 11% 12%, transparent 12% 23%),
-        linear-gradient(60deg, transparent 0 15%, rgba(255, 255, 255, 0.13) 15% 16%, transparent 16% 29%);
-      transform: rotate(-7deg);
-      z-index: -1;
-    }
-
-    .hero-art::after {
-      opacity: 0.45;
-      transform: rotate(8deg) scale(1.1);
-    }
-
     .hero-inner {
       width: 100%;
       max-width: 1040px;
-      min-height: 245px;
+      min-height: 260px;
       margin: 0 auto;
-      padding: 34px 24px 42px;
+      padding: 38px 24px 56px;
       display: flex;
       align-items: flex-end;
     }
-
     .hero-label {
-      color: rgba(255, 255, 255, 0.72);
+      color: rgba(255, 255, 255, 0.78);
       font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
     }
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      color: #fff;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.05;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .fasta { color: #68caff; }
 
+    /* ===== Content ===== */
     .content {
       width: 100%;
       max-width: 1040px;
-      margin: -54px auto 0;
+      margin: -32px auto 0;
       padding: 0 24px 42px;
       position: relative;
       z-index: 1;
     }
-
-    h1 {
-      max-width: 760px;
-      margin: 0 0 22px;
-      color: #fff;
-      font-size: clamp(34px, 5vw, 56px);
-      line-height: 1.05;
-      font-weight: 700;
-    }
-
-    .fasta {
-      color: #68caff;
-    }
-
     .notice {
       max-width: 760px;
-      margin: 0 0 24px;
-      padding: 13px 16px;
+      margin: 0 0 28px;
+      padding: 14px 18px;
       border: 1px solid rgba(0, 153, 249, 0.22);
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.78);
+      border-radius: 14px;
+      background: #fff;
       color: #334155;
-      box-shadow: 0 10px 28px rgba(8, 104, 216, 0.08);
+      font-size: 15px;
+      box-shadow: 0 8px 24px rgba(8, 104, 216, 0.08);
     }
+    .notice strong { color: var(--blue-dark); }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
       margin: 0;
       padding: 0;
@@ -170,172 +135,117 @@
     }
 
     .app-card {
-      min-height: 116px;
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 18px 16px;
-      border-radius: 20px;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 16px;
       background: var(--card);
       color: #000;
-      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.05);
-      transition: box-shadow 160ms ease, transform 160ms ease;
+      border: 1px solid var(--line);
+      transition: box-shadow 160ms ease, transform 160ms ease, border-color 160ms ease;
     }
+    .app-card > .text { min-width: 0; flex: 1; }
 
-    .app-card > span:last-child {
-      min-width: 0;
-    }
-
-    .app-card:hover,
-    .app-card:focus {
+    .app-card:hover, .app-card:focus {
       transform: translateY(-2px);
-      box-shadow: 2px 8px 18px rgba(0, 120, 252, 0.15);
+      box-shadow: 0 10px 24px rgba(0, 120, 252, 0.14);
+      border-color: rgba(0, 153, 249, 0.35);
       outline: none;
     }
 
     .icon {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 42px;
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
-      background: #eef7ff;
+      border-radius: 12px;
+      background: var(--blue-soft);
       color: var(--blue);
     }
-
-    .icon svg {
-      width: 27px;
-      height: 27px;
-      display: block;
-    }
+    .icon svg { width: 28px; height: 28px; display: block; }
 
     .card-title {
       display: block;
       margin: 0 0 4px;
-      font-size: 19px;
+      font-size: 18px;
       line-height: 1.2;
       font-weight: 700;
     }
-
     .card-text {
       display: block;
       margin: 0;
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
-    .footer-art {
-      margin-top: 54px;
-      min-height: 128px;
-      background:
-        linear-gradient(180deg, rgba(238, 247, 255, 0) 0%, #fff 68%),
-        repeating-linear-gradient(112deg, transparent 0 24px, rgba(0, 153, 249, 0.11) 24px 26px, transparent 26px 54px),
-        repeating-linear-gradient(68deg, transparent 0 30px, rgba(8, 104, 216, 0.1) 30px 32px, transparent 32px 58px);
+    .arrow {
+      color: var(--blue);
+      opacity: 0;
+      transition: opacity 160ms ease, transform 160ms ease;
+      flex: 0 0 auto;
+    }
+    .app-card:hover .arrow {
+      opacity: 1;
+      transform: translateX(2px);
     }
 
+    /* ===== Footer ===== */
     footer {
-      padding: 12px 24px 18px;
+      margin-top: 32px;
+      padding: 28px 24px 22px;
       background: #fff;
+      border-top: 1px solid var(--line);
       color: var(--muted);
       text-align: center;
       font-size: 14px;
     }
-
     .social {
       display: flex;
       justify-content: center;
-      gap: 16px;
-      margin-bottom: 10px;
+      gap: 18px;
+      margin-bottom: 12px;
     }
-
     .social a {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       display: grid;
       place-items: center;
       color: #111827;
+      border-radius: 6px;
+      transition: color 140ms ease, background 140ms ease;
     }
+    .social a:hover { color: var(--blue-dark); background: var(--blue-soft); }
+    .social svg { width: 20px; height: 20px; display: block; }
 
-    .social svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-    }
-
-    @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .content {
-        margin-top: -46px;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .nav-inner {
-        padding: 16px 18px;
-      }
-
-      .brand {
-        font-size: 22px;
-      }
-
-      .nav-links {
-        gap: 18px;
-        font-size: 16px;
-      }
-
-      .nav-links a[href*="issues"] {
-        display: none;
-      }
-
-      .hero-art,
-      .hero-inner {
-        min-height: 225px;
-      }
-
-      .hero-inner,
-      .content {
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero-inner, .content {
         width: 100%;
         max-width: 390px;
         margin-right: 0;
         margin-left: 0;
-        padding-right: 18px;
         padding-left: 18px;
+        padding-right: 18px;
       }
-
       .nav-inner {
         max-width: 390px;
         margin-right: 0;
         margin-left: 0;
+        padding: 14px 18px;
       }
-
+      .nav-links a[href*="issues"] { display: none; }
       h1 {
-        font-size: 34px;
         max-width: 100%;
         overflow-wrap: anywhere;
       }
-
-      .fasta {
-        display: block;
-      }
-
+      .fasta { display: block; }
       .notice {
         width: 100%;
         max-width: 100%;
-        font-size: 15px;
         overflow-wrap: anywhere;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .notice {
-        border-radius: 16px;
       }
     }
   </style>
@@ -367,71 +277,79 @@
   </section>
 
   <main class="content">
-    <p class="notice">Each app runs fully in the browser with Shinylive. First visits can take up to 1-2 minutes while runtime assets load and cache.</p>
+    <p class="notice">Each app runs fully in the browser with <strong>Shinylive</strong>. First visits can take 1-2 minutes while runtime assets load and cache.</p>
 
     <ul class="grid" aria-label="FASTA applications">
       <li>
-        <a class="app-card" href="./merge_FASTA/">
+        <a class="app-card" href="./tool.html?app=merge_FASTA">
           <span class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M7 9h11M7 16h18M7 23h11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-              <path d="M19 7l6 6-6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8c4 0 6 4 10 8s6 8 10 8"/>
+              <path d="M6 24c4 0 6-4 10-8s6-8 10-8"/>
+              <path d="M22 6h4v4"/>
+              <path d="M22 26h4v-4"/>
             </svg>
           </span>
-          <span>
+          <span class="text">
             <span class="card-title">Merge</span>
             <span class="card-text">Combine two or more FASTA files</span>
           </span>
+          <svg class="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
       </li>
       <li>
-        <a class="app-card" href="./FASTAtoCSV/">
+        <a class="app-card" href="./tool.html?app=FASTAtoCSV">
           <span class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M8 6h10l6 6v14H8V6z" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
-              <path d="M18 6v7h6M12 18h8M12 22h8" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="6" width="22" height="20" rx="2"/>
+              <path d="M5 12h22"/>
+              <path d="M5 19h22"/>
+              <path d="M12 12v14"/>
+              <path d="M20 12v14"/>
             </svg>
           </span>
-          <span>
+          <span class="text">
             <span class="card-title">FASTA -&gt; .CSV</span>
             <span class="card-text">Convert FASTA to .CSV file</span>
           </span>
+          <svg class="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
       </li>
       <li>
-        <a class="app-card" href="./filterFASTA/">
+        <a class="app-card" href="./tool.html?app=filterFASTA">
           <span class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M6 8h20M10 16h12M13 24h6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-              <path d="M11 8l5 8v7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 8l-5 8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 7h22l-8 10v8l-6-3v-5z"/>
             </svg>
           </span>
-          <span>
+          <span class="text">
             <span class="card-title">Filter</span>
             <span class="card-text">Use properties to filter FASTA files</span>
           </span>
+          <svg class="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
       </li>
       <li>
-        <a class="app-card" href="./paramFASTA/">
+        <a class="app-card" href="./tool.html?app=paramFASTA">
           <span class="icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M9 6v20M23 6v20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-              <path d="M9 10c7 0 7 12 14 12M23 10c-7 0-7 12-14 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-              <path d="M12 12h8M12 20h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 26V10"/>
+              <path d="M5 26h22"/>
+              <rect x="9" y="18" width="4" height="6"/>
+              <rect x="15" y="13" width="4" height="11"/>
+              <rect x="21" y="8" width="4" height="16"/>
             </svg>
           </span>
-          <span>
+          <span class="text">
             <span class="card-title">Parameters</span>
             <span class="card-text">Calculate sequence parameters</span>
           </span>
+          <svg class="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
       </li>
     </ul>
   </main>
 
-  <div class="footer-art" aria-hidden="true"></div>
   <footer>
     <div class="social" aria-label="Niels van der Velden links">
       <a href="https://github.com/nvelden" target="_blank" rel="noopener" aria-label="GitHub">
@@ -451,7 +369,7 @@
         </svg>
       </a>
     </div>
-    <div>Copyright 2022 - Niels van der Velden</div>
+    <div>&copy; 2022-2026 Niels van der Velden</div>
   </footer>
 </body>
 </html>

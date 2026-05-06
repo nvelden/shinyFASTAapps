@@ -53,7 +53,7 @@ jobs:
           }
 
       - name: Add app index
-        run: cp dashboard/index.html docs/index.html
+        run: cp dashboard/index.html dashboard/tool.html docs/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

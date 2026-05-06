@@ -6,10 +6,13 @@ On the first visit, each app can take up to 1-2 minutes to load while the browse
 
 ## Shinylive Apps
 
+- Dashboard: `https://nvelden.github.io/shinyFASTAapps/`
 - Merge FASTA: `https://nvelden.github.io/shinyFASTAapps/merge_FASTA/`
 - FASTA to CSV: `https://nvelden.github.io/shinyFASTAapps/FASTAtoCSV/`
 - Filter FASTA: `https://nvelden.github.io/shinyFASTAapps/filterFASTA/`
 - FASTA Parameters: `https://nvelden.github.io/shinyFASTAapps/paramFASTA/`
+
+The dashboard links open each app in a simple styled iframe shell. Direct app URLs are still available for embedding elsewhere.
 
 ## Embed
 
